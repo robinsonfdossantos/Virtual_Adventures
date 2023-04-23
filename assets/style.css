@@ -1,0 +1,12 @@
+html * {
+    font-family: "Montserrat";
+  }
+  
+  #map {
+    background-color: green;
+  }
+  
+  #pinterest {
+    background-color: red;
+  }
+  
