@@ -14,27 +14,27 @@
   // searchAndDisplay("sydney")
 
 
-const searchInput = document.getElementById("search-input");
-const searchButton = document.getElementById("search-btn");
-const picturesContainer = document.getElementById("pictures");
+  const apiKey = "NyXPP4dWCbpLYnNcxfxBSqiCRCmTlOg0lnpKkCbPn24vwgA0prTsCwJM";
 
-searchButton.addEventListener("click", () => {
-  const searchTerm = searchInput.value;
-  const accessToken = "1142155292906244552";
-  const limit = 15;
-  const apiUrl = `https://api.pinterest.com/v1/search/pins/?access_token=${accessToken}&query=${searchTerm}&limit=${limit}`;
+  const form = document.querySelector('search-form');
+  const input = document.querySelector('#search-input');
+  const searchBtn = document.querySelector('#search-btn');
+  const pictures = document.querySelector('#pictures');
 
-  fetch(apiUrl)
-    .then(response => response.json())
-    .then(data => {
-      // Process the data and display the pictures on your page
-      picturesContainer.innerHTML = "";
-      data.data.forEach(pin => {
-        const pictureElement = document.createElement("img");
-        pictureElement.src = pin.image.original.url;
-        pictureElement.alt = pin.description;
-        picturesContainer.appendChild(pictureElement);
-      });
-    })
-    .catch(error => console.error(error));
-}); 
+  searchBtn.addEventListener('click', () => {
+    const query = input.value;
+    searchPhotos(query);
+  });
+
+  async function searchPhotos(query) {
+    const url = `https://api.pexels.com/v1/search?query=${query}&per_page=10`;
+    const response = await axios.get(url, { headers: { Authorization: apiKey } });
+    const data = response.data;
+
+    pictures.innerHTML = '';
+    data.photos.forEach(photo => {
+      const img = document.createElement('img');
+      img.src = photo.src.medium;
+      pictures.appendChild(img);
+    });
+  }

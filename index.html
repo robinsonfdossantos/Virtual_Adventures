@@ -13,13 +13,15 @@
     />
     <link rel="stylesheet" href="./assets/style.css" />
 
-    
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
+
+
   <body class="font-sans text-slate-700">
     <div class="p-12 pb-6 mt-16">
-      <h1 class="text-4xl font-semibold">Explore your next destination</h1>
+      <label for="query"><h1 class="text-4xl font-semibold">Explore your next destination</h1></label>
     </div>
     <div id="search-container" class="p-10 pt-0 w-full">
       <form id="search-form" action="" class="w-full">
@@ -31,7 +33,7 @@
           placeholder='Try "Sydney"'
         />
         <button
-          type="submit"
+          type="button"
           id="search-btn"
           class="bg-amber-300 font-semibold p-3 pl-5 pr-5 rounded-lg shadow-lg"
         >
@@ -41,10 +43,29 @@
     </div>
   
     <div id="map" class="p-10">Map</div>
-    <div id="pinterest" class="p-10">Pinterest</div>
-
-    <div id = "pictures"></div>
+    <div id="pictures" class="p-10">Pexels</div>
 
     <script src="./assets/script.js"></script>
   </body>
 </html>
+
+
+<!--<!DOCTYPE html>
+<html>
+<head>
+  <title>Search Images</title>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+  <form>
+    <label for="query">Search for images:</label>
+    <input type="text" id="query">
+    <button type="button" id="search-btn">Search</button>
+  </form>
+  <div id="pictures"></div>
+
+
+  <script src="./assets/script.js"></script>
+
+</body>
+</html>-->
