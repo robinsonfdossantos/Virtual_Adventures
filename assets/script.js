@@ -1,4 +1,3 @@
-
 document.getElementById("search-form").onsubmit = (e) => {
   e.preventDefault();
   const input = document.getElementById("search-input").value;
