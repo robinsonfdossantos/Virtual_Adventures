@@ -66,7 +66,7 @@
   
   window.initMap = initMap();
   
-  //Robinson's Pexels' API key
+  //Robinson's Pexels' APIkey
   const apiKey = "NyXPP4dWCbpLYnNcxfxBSqiCRCmTlOg0lnpKkCbPn24vwgA0prTsCwJM";
 
   const form = document.querySelector('search-form');
