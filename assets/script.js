@@ -23,71 +23,113 @@ var searchBar = document.querySelector('#search-input');
   
 });
 
+
+let map;
+
+async function initMap() {
+  //@ts-ignore
+  const { Map } = await google.maps.importLibrary("maps");
+
+  map = new Map(document.getElementById("map"), {
+    center: { lat: -34.397, lng: 150.644 },
+    zoom: 8,
+    mapTypeId: 'terrain'
+  });
+}
+
+initMap()
+
+map = new Map(document.getElementById('map'), {
+  center: {lat: -34.397, lng: 150.644},
+  zoom: 8
+  
+});
+
+map = new Map(document.getElementById("map"));
+
 // let map;
+// let service;
+// let infowindow;
 
-// async function initMap() {
-//   //@ts-ignore
-//   const { Map } = await google.maps.importLibrary("maps");
+// function initMap() {
+//   const sydney = new google.maps.LatLng(-33.867, 151.195);
 
-//   map = new Map(document.getElementById("map"), {
-//     center: { lat: -34.397, lng: 150.644 },
-//     zoom: 8,
-//     mapTypeId: 'terrain'
+//   infowindow = new google.maps.InfoWindow();
+//   map = new google.maps.Map(document.getElementById("map"), {
+//     center: sydney,
+//     zoom: 15,
+//   });
+
+//   const request = {
+//     query: "Museum of Contemporary Art Australia",
+//     fields: ["name", "geometry"],
+//   };
+
+//   service = new google.maps.places.PlacesService(map);
+//   service.findPlaceFromQuery(request, (results, status) => {
+//     if (status === google.maps.places.PlacesServiceStatus.OK && results) {
+//       for (let i = 0; i < results.length; i++) {
+//         createMarker(results[i]);
+//       }
+
+//       map.setCenter(results[0].geometry.location);
+//     }
 //   });
 // }
 
-// initMap()
+// function createMarker(place) {
+//   if (!place.geometry || !place.geometry.location) return;
 
-// map = new Map(document.getElementById('map'), {
-//   center: {lat: -34.397, lng: 150.644},
-//   zoom: 8
-  
-// });
+//   const marker = new google.maps.Marker({
+//     map,
+//     position: place.geometry.location,
+//   });
 
-// map = new Map(document.getElementById("map"));
+//   google.maps.event.addListener(marker, "click", () => {
+//     infowindow.setContent(place.name || "");
+//     infowindow.open(map);
+//   });
+// }
 
-let map;
-let service;
-let infowindow;
+// window.initMap = initMap;
 
-function initMap() {
-  const sydney = new google.maps.LatLng(-33.867, 151.195);
-
-  infowindow = new google.maps.InfoWindow();
-  map = new google.maps.Map(document.getElementById("map"), {
-    center: sydney,
-    zoom: 15,
-  });
-
-  const request = {
-    query: "Museum of Contemporary Art Australia",
-    fields: ["name", "geometry"],
+/*document.getElementById("search-form").onsubmit = (e) => {
+    e.preventDefault();
+    const input = document.getElementById("search-input").value;
+    console.log("searching", input);
   };
+  
+  const searchAndDisplay = (place) => {
+    // request the api
+    // use js to display
+    const map = document.getElementById("map");
+  };*/
+  
+  // searchAndDisplay("sydney")
 
-  service = new google.maps.places.PlacesService(map);
-  service.findPlaceFromQuery(request, (results, status) => {
-    if (status === google.maps.places.PlacesServiceStatus.OK && results) {
-      for (let i = 0; i < results.length; i++) {
-        createMarker(results[i]);
-      }
 
-      map.setCenter(results[0].geometry.location);
-    }
+  const apiKey = "NyXPP4dWCbpLYnNcxfxBSqiCRCmTlOg0lnpKkCbPn24vwgA0prTsCwJM";
+
+  const form = document.querySelector('search-form');
+  const input = document.querySelector('#search-input');
+  const searchBtn = document.querySelector('#search-btn');
+  const pictures = document.querySelector('#pictures');
+
+  searchBtn.addEventListener('click', () => {
+    const query = input.value;
+    searchPhotos(query);
   });
-}
 
-function createMarker(place) {
-  if (!place.geometry || !place.geometry.location) return;
+  async function searchPhotos(query) {
+    const url = `https://api.pexels.com/v1/search?query=${query}&per_page=10`;
+    const response = await axios.get(url, { headers: { Authorization: apiKey } });
+    const data = response.data;
 
-  const marker = new google.maps.Marker({
-    map,
-    position: place.geometry.location,
-  });
+    pictures.innerHTML = '';
+    data.photos.forEach(photo => {
+      const img = document.createElement('img');
+      img.src = photo.src.medium;
+      pictures.appendChild(img);
+    });
+  }
 
-  google.maps.event.addListener(marker, "click", () => {
-    infowindow.setContent(place.name || "");
-    infowindow.open(map);
-  });
-}
-
-window.initMap = initMap;
