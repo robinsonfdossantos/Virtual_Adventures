@@ -3,10 +3,18 @@ html * {
   }
   
   #map {
-    background-color: green;
+    display: flex;
+    height: 500px;
+    margin: 15px 50px 15px 50px;
   }
   
-  #pinterest {
-    background-color: red;
+  #pictures {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
   }
   
+  #pictures img {
+    width: 15%;
+    margin: 5px;
+  }
