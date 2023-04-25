@@ -33,12 +33,18 @@
       <input type="text" name="search" id="search-input" class="p-3 pl-6 rounded-lg shadow-md w-5/6 mr-4 mb-4"
         placeholder='What is your next stop?' />
 
-      <button type="button" id="search-btn" onclick="saveSearch(), currentLocation()"
+      <button type="submit" id="search-btn"
         class="bg-amber-300 font-semibold p-3 pl-5 pr-5 rounded-lg shadow-lg">Search</button>
     </form>
   </div>
 
-  <div id="pictures" class="p-10"></div>
+  <div id="history-container" class="p-10 pt-5 w-full">
+    <h3 class="text-xl font-semibold mb-5">Recent searches</h3>
+    <div id="history-buttons-container">
+    </div>
+  </div>
+
+  <div id="pictures" class="p-10 w-full grid grid-cols-3 grid-rows-1 gap-4"></div>
   <div id="map" class="p-10"></div>
 
   <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
