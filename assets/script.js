@@ -91,3 +91,23 @@
       pictures.appendChild(img);
     });
   }
+
+
+  function saveSearch(){
+    const newSearch = $("#search-input").val();
+  
+    const savedSearch = JSON.parse(localStorage.getItem("")) || [];
+  
+    if(!savedSearch.includes(newSearch)){
+        savedSearch.push(newSearch);
+        localStorage.setItem("search", JSON.stringify(savedSearch));
+    }
+  }
+
+  $("#search-input").on("click", function() {
+
+    const search = document.getElementById("#search-input").value;
+    saveSearch();
+  });
+
+  saveSearch();
