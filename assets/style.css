@@ -1,20 +1,9 @@
 html * {
-    font-family: "Montserrat";
-  }
-  
-  #map {
-    display: flex;
-    height: 500px;
-    margin: 15px 50px 30px 50px;
-  }
-  
-  #pictures {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-  
-  #pictures img {
-    width: 15%;
-    margin: 5px;
-  }
+  font-family: "Montserrat";
+}
+
+#map {
+  display: flex;
+  height: 500px;
+  margin: 15px 50px 30px 50px;
+}
