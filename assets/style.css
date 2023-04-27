@@ -1,16 +1,22 @@
 html * {
-    font-family: "Montserrat";
-  }
-  
-  #map {
-    /* background-color: green; */
-    height: 500px;
-  margin: 50px;
-  /* border: 2px solid black; */
+  font-family: "Montserrat";
+}
 
-  }
-  
-  #pinterest {
-    background-color: red;
-  }
+#map {
+  display: flex;
+  height: 585px;
+  left: 500px;
+  top: -7px;
+  width: 980px;
+  margin: 15px 50px 30px 50px;
+  border: 2px solid black;
+  background-color: gray;
+}
 
+.map-container {
+
+  background-color: #666666d1;
+  height: 600px;
+  border: 2px solid black;
+
+}
