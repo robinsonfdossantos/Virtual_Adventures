@@ -1,135 +1,218 @@
-document.getElementById("search-form").onsubmit = (e) => {
-  e.preventDefault();
-  const input = document.getElementById("search-input").value;
-  console.log("searching", input);
-};
+// Ben's Coding section
+// Google maps Api key: AIzaSyDbvldWkelK0RqgCBY2Q_onev8mN6ZMSV8
 
-const searchAndDisplay = (place) => {
-  // request the api
-  // use js to display
-  const map = document.getElementById("map");
-};
-
-
-
-
-// Ben's Coding section 
-// Google maps Api key: AIzaSyDbvldWkelK0RqgCBY2Q_onev8mN6ZMSV8     
-
-var searchBar = document.querySelector('#search-input');
-
-(g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
+((g) => {
+  var h,
+    a,
+    k,
+    p = "The Google Maps JavaScript API",
+    c = "google",
+    l = "importLibrary",
+    q = "__ib__",
+    m = document,
+    b = window;
+  b = b[c] || (b[c] = {});
+  var d = b.maps || (b.maps = {}),
+    r = new Set(),
+    e = new URLSearchParams(),
+    u = () =>
+      h ||
+      (h = new Promise(async (f, n) => {
+        await (a = m.createElement("script"));
+        e.set("libraries", [...r] + "");
+        for (k in g)
+          e.set(
+            k.replace(/[A-Z]/g, (t) => "_" + t[0].toLowerCase()),
+            g[k]
+          );
+        e.set("callback", c + ".maps." + q);
+        a.src = `https://maps.${c}apis.com/maps/api/js?` + e;
+        d[q] = f;
+        a.onerror = () => (h = n(Error(p + " could not load.")));
+        a.nonce = m.querySelector("script[nonce]")?.nonce || "";
+        m.head.append(a);
+      }));
+  d[l]
+    ? console.warn(p + " only loads once. Ignoring:", g)
+    : (d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n)));
+})({
   key: "AIzaSyDbvldWkelK0RqgCBY2Q_onev8mN6ZMSV8",
-  
 });
 
 
-let map;
 
-async function initMap() {
-  //@ts-ignore
-  const { Map } = await google.maps.importLibrary("maps");
+function initAutocomplete() {
+  const map = new google.maps.Map(document.getElementById("map"), {
+    center: { lat: -33.8688, lng: 151.2195 },
+    zoom: 13,
+    mapTypeId: "roadmap",
+  });
+  // Create the search box and link it to the UI element.
+  const input = document.getElementById("search-input");
+  const searchBox = new google.maps.places.SearchBox(input);
 
-  map = new Map(document.getElementById("map"), {
-    center: { lat: -34.397, lng: 150.644 },
-    zoom: 8,
-    mapTypeId: 'terrain'
+  // map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+  // Bias the SearchBox results towards current map's viewport.
+  map.addListener("bounds_changed", () => {
+    searchBox.setBounds(map.getBounds());
+  });
+
+  let markers = [];
+
+  // Listen for the event fired when the user selects a prediction and retrieve
+  // more details for that place.
+  searchBox.addListener("places_changed", () => {
+    const places = searchBox.getPlaces();
+
+    if (places.length == 0) {
+      return;
+    }
+
+    // Clear out the old markers.
+    markers.forEach((marker) => {
+      marker.setMap(null);
+    });
+    markers = [];
+
+    // For each place, get the icon, name and location.
+    const bounds = new google.maps.LatLngBounds();
+
+    places.forEach((place) => {
+      if (!place.geometry || !place.geometry.location) {
+        console.log("Returned place contains no geometry");
+        return;
+      }
+
+      const icon = {
+        url: place.icon,
+        size: new google.maps.Size(71, 71),
+        origin: new google.maps.Point(0, 0),
+        anchor: new google.maps.Point(17, 34),
+        scaledSize: new google.maps.Size(25, 25),
+      };
+
+      // Create a marker for each place.
+      markers.push(
+        new google.maps.Marker({
+          map,
+          icon,
+          title: place.name,
+          position: place.geometry.location,
+        })
+      );
+      if (place.geometry.viewport) {
+        // Only geocodes have viewport.
+        bounds.union(place.geometry.viewport);
+      } else {
+        bounds.extend(place.geometry.location);
+      }
+    });
+    map.fitBounds(bounds);
   });
 }
 
-initMap()
+window.initAutocomplete = initAutocomplete();
 
-map = new Map(document.getElementById('map'), {
-  center: {lat: -34.397, lng: 150.644},
-  zoom: 8
-  
-});
+//Robinson's Pexels' APIkey
+const apiKey = "NyXPP4dWCbpLYnNcxfxBSqiCRCmTlOg0lnpKkCbPn24vwgA0prTsCwJM";
 
-map = new Map(document.getElementById("map"));
+const form = document.querySelector("search-form");
+const input = document.querySelector("#search-input");
+const searchBtn = document.querySelector("#search-btn");
+const pictures = document.querySelector("#pictures");
 
-// let map;
-// let service;
-// let infowindow;
+async function searchPhotos(query) {
+  const url = `https://api.pexels.com/v1/search?query=${query}&per_page=15`;
+  const response = await axios.get(url, { headers: { Authorization: apiKey } });
+  const data = response.data.photos;
 
-// function initMap() {
-//   const sydney = new google.maps.LatLng(-33.867, 151.195);
+  const photoColumns = [
+    data.slice(0, 5),
+    data.slice(5, 10),
+    data.slice(10, 15),
+  ];
 
-//   infowindow = new google.maps.InfoWindow();
-//   map = new google.maps.Map(document.getElementById("map"), {
-//     center: sydney,
-//     zoom: 15,
-//   });
-
-//   const request = {
-//     query: "Museum of Contemporary Art Australia",
-//     fields: ["name", "geometry"],
-//   };
-
-//   service = new google.maps.places.PlacesService(map);
-//   service.findPlaceFromQuery(request, (results, status) => {
-//     if (status === google.maps.places.PlacesServiceStatus.OK && results) {
-//       for (let i = 0; i < results.length; i++) {
-//         createMarker(results[i]);
-//       }
-
-//       map.setCenter(results[0].geometry.location);
-//     }
-//   });
-// }
-
-// function createMarker(place) {
-//   if (!place.geometry || !place.geometry.location) return;
-
-//   const marker = new google.maps.Marker({
-//     map,
-//     position: place.geometry.location,
-//   });
-
-//   google.maps.event.addListener(marker, "click", () => {
-//     infowindow.setContent(place.name || "");
-//     infowindow.open(map);
-//   });
-// }
-
-// window.initMap = initMap;
-
-/*document.getElementById("search-form").onsubmit = (e) => {
-    e.preventDefault();
-    const input = document.getElementById("search-input").value;
-    console.log("searching", input);
-  };
-  
-  const searchAndDisplay = (place) => {
-    // request the api
-    // use js to display
-    const map = document.getElementById("map");
-  };*/
-  
-  // searchAndDisplay("sydney")
-
-
-  const apiKey = "NyXPP4dWCbpLYnNcxfxBSqiCRCmTlOg0lnpKkCbPn24vwgA0prTsCwJM";
-
-  const form = document.querySelector('search-form');
-  const input = document.querySelector('#search-input');
-  const searchBtn = document.querySelector('#search-btn');
-  const pictures = document.querySelector('#pictures');
-
-  searchBtn.addEventListener('click', () => {
-    const query = input.value;
-    searchPhotos(query);
-  });
-
-  async function searchPhotos(query) {
-    const url = `https://api.pexels.com/v1/search?query=${query}&per_page=10`;
-    const response = await axios.get(url, { headers: { Authorization: apiKey } });
-    const data = response.data;
-
-    pictures.innerHTML = '';
-    data.photos.forEach(photo => {
-      const img = document.createElement('img');
+  pictures.innerHTML = "";
+  photoColumns.forEach((column) => {
+    const col = document.createElement("div");
+    col.classList.add("flex-col");
+    column.forEach((photo) => {
+      const img = document.createElement("img");
       img.src = photo.src.medium;
-      pictures.appendChild(img);
+      img.classList.add("w-full", "block", "mb-5");
+      col.appendChild(img);
     });
-  }
+    pictures.appendChild(col);
+  });
+}
 
+// Natasa's coding section
+
+// save the place input to local storage
+function saveSearch(place) {
+  const limit = 5;
+  const savedSearch = JSON.parse(localStorage.getItem("search-history")) || [];
+
+  // [london,sydney,melbourne] -> filteredArray = [london, melbourne]
+  // [sydney, ...filteredArray]
+  if (savedSearch.includes(place)) {
+    const newSearchHistory = [
+      place,
+      ...savedSearch.filter((location) => location !== place),
+    ].slice(0, limit);
+    localStorage.setItem("search-history", JSON.stringify(newSearchHistory));
+  } else {
+    const newSearchHistory = [place, ...savedSearch].slice(0, limit);
+    localStorage.setItem("search-history", JSON.stringify(newSearchHistory));
+  }
+}
+
+const exploreDestination = (place) => {
+  // TODO: display destination on google maps
+
+  // get the images from pexels
+  searchPhotos(place);
+};
+
+const generateHistory = () => {
+  const savedSearch = JSON.parse(localStorage.getItem("search-history")) || [];
+  const container = document.getElementById("history-buttons-container");
+  container.innerHTML = "";
+
+  savedSearch.forEach((place) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.innerHTML = place;
+    btn.onclick = () => {
+      $("#search-input").val(place);
+      saveSearch(place);
+      exploreDestination(place);
+      generateHistory();
+      
+    };
+    btn.classList.add(
+      "font-semibold",
+      "p-3",
+      "pl-5",
+      "pr-5",
+      "mr-5",
+      "mb-3",
+      "rounded-lg",
+      "shadow-lg"
+    );
+    container.appendChild(btn);
+  });
+};
+
+generateHistory();
+
+document.getElementById("search-form").onsubmit = (e) => {
+  e.preventDefault();
+  const newSearch = $("#search-input").val();
+
+  if (!newSearch) return;
+
+  saveSearch(newSearch);
+  generateHistory();
+  exploreDestination(newSearch);
+};
