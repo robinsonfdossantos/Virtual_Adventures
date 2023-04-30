@@ -41,7 +41,6 @@
 
 // Natasa
 let map;
-let markers = [];
 
 function getPredictionsAndDisplayOnMap(input) {
   const service = new google.maps.places.AutocompleteService();
@@ -80,13 +79,7 @@ function getPredictionsAndDisplayOnMap(input) {
           scaledSize: new google.maps.Size(25, 25),
         };
 
-
-        // Clear out the old markers.
-        markers.forEach((marker) => {
-          marker.setMap(null);
-        });
-        markers = [];
-
+        let markers = [];
         // Create a marker for each place.
         markers.push(
           new google.maps.Marker({
@@ -124,6 +117,8 @@ function initAutocomplete() {
   map.addListener("bounds_changed", () => {
     searchBox.setBounds(map.getBounds());
   });
+
+  let markers = [];
 
   // Natasa's update
   document
