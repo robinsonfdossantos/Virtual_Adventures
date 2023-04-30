@@ -39,10 +39,71 @@
   key: "AIzaSyDbvldWkelK0RqgCBY2Q_onev8mN6ZMSV8",
 });
 
+// Natasa
+let map;
 
+function getPredictionsAndDisplayOnMap(input) {
+  const service = new google.maps.places.AutocompleteService();
+  service.getQueryPredictions({ input }, function (places, status) {
+    if (status != google.maps.places.PlacesServiceStatus.OK || !places) {
+      alert(status);
+      return;
+    }
+
+    if (places.length == 0) {
+      return;
+    }
+
+    // For each place, get the icon, name and location.
+    const bounds = new google.maps.LatLngBounds();
+
+    [places[0]].forEach((placePrediction) => {
+      var request = {
+        placeId: placePrediction.place_id,
+        fields: ["name", "geometry", "icon"],
+      };
+
+      // get geometry details
+      const placesService = new google.maps.places.PlacesService(map);
+      placesService.getDetails(request, function (place) {
+        if (!place.geometry || !place.geometry.location) {
+          console.log("Returned place contains no geometry");
+          return;
+        }
+
+        const icon = {
+          url: place.icon,
+          size: new google.maps.Size(71, 71),
+          origin: new google.maps.Point(0, 0),
+          anchor: new google.maps.Point(17, 34),
+          scaledSize: new google.maps.Size(25, 25),
+        };
+
+        let markers = [];
+        // Create a marker for each place.
+        markers.push(
+          new google.maps.Marker({
+            map,
+            icon,
+            title: place.name,
+            position: place.geometry.location,
+          })
+        );
+        if (place.geometry.viewport) {
+          // Only geocodes have viewport.
+          bounds.union(place.geometry.viewport);
+        } else {
+          console.log(place.geometry.location);
+          bounds.extend(place.geometry.location);
+        }
+        map.fitBounds(bounds);
+      });
+    });
+  });
+}
 
 function initAutocomplete() {
-  const map = new google.maps.Map(document.getElementById("map"), {
+  map = new google.maps.Map(document.getElementById("map"), {
     center: { lat: -33.8688, lng: 151.2195 },
     zoom: 13,
     mapTypeId: "roadmap",
@@ -59,56 +120,22 @@ function initAutocomplete() {
 
   let markers = [];
 
-  // Listen for the event fired when the user selects a prediction and retrieve
-  // more details for that place.
-  searchBox.addListener("places_changed", () => {
-    const places = searchBox.getPlaces();
+  // Natasa's update
+  document
+    .getElementById("search-form")
+    .addEventListener("submit", function (event) {
+      event.preventDefault();
 
-    if (places.length == 0) {
-      return;
-    }
+      // Clear out the old markers.
+      markers.forEach((marker) => {
+        marker.setMap(null);
+      });
+      markers = [];
 
-    // Clear out the old markers.
-    markers.forEach((marker) => {
-      marker.setMap(null);
-    });
-    markers = [];
-
-    // For each place, get the icon, name and location.
-    const bounds = new google.maps.LatLngBounds();
-
-    places.forEach((place) => {
-      if (!place.geometry || !place.geometry.location) {
-        console.log("Returned place contains no geometry");
-        return;
-      }
-
-      const icon = {
-        url: place.icon,
-        size: new google.maps.Size(71, 71),
-        origin: new google.maps.Point(0, 0),
-        anchor: new google.maps.Point(17, 34),
-        scaledSize: new google.maps.Size(25, 25),
-      };
-
-      // Create a marker for each place.
-      markers.push(
-        new google.maps.Marker({
-          map,
-          icon,
-          title: place.name,
-          position: place.geometry.location,
-        })
+      getPredictionsAndDisplayOnMap(
+        document.getElementById("search-input").value
       );
-      if (place.geometry.viewport) {
-        // Only geocodes have viewport.
-        bounds.union(place.geometry.viewport);
-      } else {
-        bounds.extend(place.geometry.location);
-      }
     });
-    map.fitBounds(bounds);
-  });
 }
 
 window.initAutocomplete = initAutocomplete();
@@ -185,10 +212,10 @@ const generateHistory = () => {
     btn.innerHTML = place;
     btn.onclick = () => {
       $("#search-input").val(place);
+      getPredictionsAndDisplayOnMap(place);
       saveSearch(place);
       exploreDestination(place);
       generateHistory();
-      
     };
     btn.classList.add(
       "font-semibold",
@@ -206,7 +233,7 @@ const generateHistory = () => {
 
 generateHistory();
 
-document.getElementById("search-form").onsubmit = (e) => {
+document.getElementById("search-form").addEventListener("submit", (e) => {
   e.preventDefault();
   const newSearch = $("#search-input").val();
 
@@ -215,4 +242,4 @@ document.getElementById("search-form").onsubmit = (e) => {
   saveSearch(newSearch);
   generateHistory();
   exploreDestination(newSearch);
-};
+});
