@@ -51,7 +51,7 @@ function initAutocomplete() {
   const input = document.getElementById("search-input");
   const searchBox = new google.maps.places.SearchBox(input);
 
-  // map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+  // map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);0
   // Bias the SearchBox results towards current map's viewport.
   map.addListener("bounds_changed", () => {
     searchBox.setBounds(map.getBounds());
@@ -63,6 +63,7 @@ function initAutocomplete() {
   // more details for that place.
   searchBox.addListener("places_changed", () => {
     const places = searchBox.getPlaces();
+    console.log(places)
 
     if (places.length == 0) {
       return;
@@ -125,7 +126,7 @@ async function searchPhotos(query) {
   const url = `https://api.pexels.com/v1/search?query=${query}&per_page=15`;
   const response = await axios.get(url, { headers: { Authorization: apiKey } });
   const data = response.data.photos;
-
+console.log(data)
   const photoColumns = [
     data.slice(0, 5),
     data.slice(5, 10),
@@ -216,3 +217,20 @@ document.getElementById("search-form").onsubmit = (e) => {
   generateHistory();
   exploreDestination(newSearch);
 };
+
+
+
+var coll = document.getElementsByClassName("collapsible");
+var i;
+
+for (i = 0; i < coll.length; i++) {
+  coll[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var content = this.nextElementSibling;
+    if (content.style.display === "block") {
+      content.style.display = "none";
+    } else {
+      content.style.display = "block";
+    }
+  });
+}

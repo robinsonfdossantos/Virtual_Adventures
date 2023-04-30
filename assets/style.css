@@ -20,3 +20,24 @@ html * {
   border: 2px solid black;
 
 }
+
+.collapsible {
+ 
+  color: black;
+  cursor: pointer;
+  
+  position: relative;
+  left: 950px;
+  margin-bottom: 14px;
+  
+  
+  
+
+  
+}
+
+.active, .collapsible:hover {
+  background-color: #f5a803ea;
+  ;
+}
+
