@@ -3,20 +3,10 @@ html * {
 }
 
 #map {
-  display: flex;
-  height: 585px;
-  left: 500px;
-  top: -7px;
-  width: 980px;
-  margin: 15px 50px 30px 50px;
-  border: 2px solid black;
-  background-color: gray;
+  height: 300px;
+  width: 100%;
 }
 
 .map-container {
-
-  background-color: #666666d1;
-  height: 600px;
-  border: 2px solid black;
-
+  height: 300px;
 }
