@@ -186,6 +186,7 @@ const generateHistory = () => {
     btn.innerHTML = place;
     btn.onclick = () => {
       $("#search-input").val(place);
+      
       saveSearch(place);
       exploreDestination(place);
       generateHistory();
@@ -234,3 +235,4 @@ for (i = 0; i < coll.length; i++) {
     }
   });
 }
+
