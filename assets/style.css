@@ -13,8 +13,9 @@ html * {
 
 .collapsible{
 
+justify-content: center;
+margin-bottom: 10px;
+margin-left: 10px;
 position: relative;
-left: 950px;
-margin-bottom: 14px;
-
+left: 30px;
 }
