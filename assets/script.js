@@ -39,7 +39,6 @@
   key: "AIzaSyDbvldWkelK0RqgCBY2Q_onev8mN6ZMSV8",
 });
 
-// Natasa
 let map;
 let markers = [];
 
@@ -64,7 +63,7 @@ function getPredictionsAndDisplayOnMap(input) {
         fields: ["name", "geometry", "icon"],
       };
 
-      // get geometry details
+      // Get geometry details
       const placesService = new google.maps.places.PlacesService(map);
       placesService.getDetails(request, function (place) {
         if (!place.geometry || !place.geometry.location) {
@@ -79,7 +78,6 @@ function getPredictionsAndDisplayOnMap(input) {
           anchor: new google.maps.Point(17, 34),
           scaledSize: new google.maps.Size(25, 25),
         };
-
 
         // Clear out the old markers.
         markers.forEach((marker) => {
@@ -119,7 +117,6 @@ function initAutocomplete() {
   const input = document.getElementById("search-input");
   const searchBox = new google.maps.places.SearchBox(input);
 
-  // map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
   // Bias the SearchBox results towards current map's viewport.
   map.addListener("bounds_changed", () => {
     searchBox.setBounds(map.getBounds());
@@ -180,13 +177,11 @@ async function searchPhotos(query) {
 
 // Natasa's coding section
 
-// save the place input to local storage
+// Save the place input to local storage
 function saveSearch(place) {
   const limit = 5;
   const savedSearch = JSON.parse(localStorage.getItem("search-history")) || [];
 
-  // [london,sydney,melbourne] -> filteredArray = [london, melbourne]
-  // [sydney, ...filteredArray]
   if (savedSearch.includes(place)) {
     const newSearchHistory = [
       place,
@@ -199,10 +194,8 @@ function saveSearch(place) {
   }
 }
 
+// Get the images from pexels
 const exploreDestination = (place) => {
-  // TODO: display destination on google maps
-
-  // get the images from pexels
   searchPhotos(place);
 };
 
@@ -236,7 +229,9 @@ const generateHistory = () => {
   });
 };
 
+
 generateHistory();
+
 
 document.getElementById("search-form").addEventListener("submit", (e) => {
   e.preventDefault();
@@ -253,7 +248,7 @@ var coll = document.getElementsByClassName("collapsible");
 var i;
 
 for (i = 0; i < coll.length; i++) {
-  coll[i].addEventListener("click", function() {
+  coll[i].addEventListener("click", function () {
     this.classList.toggle("active");
     var content = this.nextElementSibling;
     if (content.style.display === "block") {
