@@ -59,8 +59,8 @@ left: 30px;
 
 #modalImages {
 
-  min-height: 200px;
-  min-width: 800px;
+  min-height: 200%;
+  min-width: 100%;
 } 
 
 .modalP {
