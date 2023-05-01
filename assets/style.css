@@ -10,3 +10,11 @@ html * {
 .map-container {
   height: 300px;
 }
+
+.collapsible{
+
+position: relative;
+left: 950px;
+margin-bottom: 14px;
+
+}
