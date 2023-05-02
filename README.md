@@ -20,3 +20,12 @@ The webpage is called Virtual Adventures and it is helping users find the best t
 Functionality: When user opens the website, the model "Welcome to our page" appears, showing Virtual Adventures logo and images of various destinations. User can close the model by clicking on the close button. When user is shown the main page of the website, then user can search for particular destination in search section and click Search button or enter/return button on keyboard. When user clicks Search button, the requsted location will appear in Recent Searches section, in the Google Maps section and multiple images for that particular location will show below Google Maps section.
 
 ![picture alt](/assets/screenshot.gif)
+
+## Credits
+
+- Google Maps API
+- Pexels API
+
+## License
+
+Licensed under the MIT License.
